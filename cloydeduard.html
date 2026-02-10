@@ -15,12 +15,18 @@
         body {
             background: linear-gradient(135deg, #ffafcc 0%, #ff758f 50%, #ff477e 100%);
             min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .scroll-container {
+            min-height: 100vh;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            overflow: hidden;
+            padding: 20px;
             position: relative;
-            padding: 15px;
         }
 
         .container {
@@ -36,6 +42,10 @@
             animation: fadeIn 0.8s ease-out;
             border: 2px solid #ff758f;
             margin: 10px;
+            min-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
         @keyframes fadeIn {
@@ -143,7 +153,7 @@
         }
 
         .hearts-container {
-            position: absolute;
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
@@ -204,12 +214,13 @@
         }
 
         .confetti {
-            position: absolute;
+            position: fixed;
             width: 10px;
             height: 10px;
             background-color: #ff477e;
             top: 0;
             opacity: 0;
+            z-index: 1000;
         }
 
         .personal-note {
@@ -219,6 +230,23 @@
             margin: 20px 0;
             border-left: 4px solid #ff477e;
             text-align: left;
+            max-height: 300px;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #ff758f transparent;
+        }
+
+        .personal-note::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .personal-note::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .personal-note::-webkit-scrollbar-thumb {
+            background-color: #ff758f;
+            border-radius: 10px;
         }
 
         .personal-note p {
@@ -228,11 +256,126 @@
             margin-bottom: 8px;
         }
 
+        /* Scroll Down Indicator */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            text-align: center;
+            z-index: 20;
+            animation: bounceIndicator 2s infinite;
+            cursor: pointer;
+        }
+
+        .scroll-indicator span {
+            display: block;
+            font-size: 0.8rem;
+            margin-bottom: 5px;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+
+        .scroll-indicator i {
+            font-size: 1.5rem;
+            color: white;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+
+        @keyframes bounceIndicator {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-10px); }
+            60% { transform: translateX(-50%) translateY(-5px); }
+        }
+
+        /* Scroll to Top Button */
+        .scroll-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #ff758f 0%, #ff477e 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 71, 126, 0.3);
+            z-index: 100;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .scroll-top.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .scroll-top:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(255, 71, 126, 0.4);
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: transparent;
+            z-index: 100;
+        }
+
+        .progress-bar {
+            height: 4px;
+            background: linear-gradient(to right, #ffafcc, #ff477e);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* Section indicator dots */
+        .section-dots {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 50;
+        }
+
+        .section-dot {
+            width: 12px;
+            height: 12px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            margin: 10px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .section-dot.active {
+            background: white;
+            transform: scale(1.2);
+            border-color: #ff477e;
+        }
+
+        .section-dot:hover {
+            transform: scale(1.3);
+            background: white;
+        }
+
         /* Extra small devices */
         @media (max-width: 576px) {
             .container {
                 padding: 20px 15px;
                 border-radius: 15px;
+                min-height: 85vh;
             }
             
             .buttons-container {
@@ -249,10 +392,26 @@
             .personal-note {
                 padding: 12px;
                 margin: 15px 0;
+                max-height: 250px;
             }
             
             .heart {
                 font-size: 18px;
+            }
+            
+            .scroll-indicator {
+                bottom: 15px;
+            }
+            
+            .scroll-top {
+                bottom: 20px;
+                right: 20px;
+                width: 45px;
+                height: 45px;
+            }
+            
+            .section-dots {
+                right: 10px;
             }
         }
 
@@ -261,6 +420,7 @@
             .container {
                 max-width: 90%;
                 padding: 30px;
+                min-height: 85vh;
             }
             
             .button {
@@ -289,6 +449,7 @@
             .container {
                 padding: 15px 10px;
                 margin: 5px;
+                min-height: 80vh;
             }
             
             h1 {
@@ -314,9 +475,21 @@
                 width: 90%;
                 max-width: 250px;
             }
+            
+            .scroll-indicator {
+                bottom: 10px;
+            }
+            
+            .scroll-indicator span {
+                font-size: 0.7rem;
+            }
+            
+            .scroll-indicator i {
+                font-size: 1.2rem;
+            }
         }
 
-        /* Prevent text overflow on very small screens */
+        /* Prevent text overflow */
         .break-word {
             overflow-wrap: break-word;
             word-wrap: break-word;
@@ -325,38 +498,69 @@
     </style>
 </head>
 <body>
+    <!-- Progress Bar -->
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Scroll to Top Button -->
+    <button class="scroll-top" id="scrollTop" title="Scroll to top">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+    <!-- Section Navigation Dots -->
+    <div class="section-dots" id="sectionDots">
+        <div class="section-dot active" data-section="0"></div>
+    </div>
+
+    <!-- Floating Hearts -->
     <div class="hearts-container" id="heartsContainer"></div>
     
-    <div class="container">
-        <h1 class="break-word">Happy Valentine's Day, <span class="name-highlight">Eunice</span>! 💝</h1>
-        <p class="subtitle break-word">You make every day brighter, and today I have a special question for you...</p>
-        
-        <div class="personal-note">
-            <p class="break-word">Dear Eunice,</p>
-            <p class="break-word">From the moment I met you, you've brought so much joy and light into my life. Your smile brightens my day, your laughter is music to my ears, and your presence makes everything better.</p>
-            <p class="break-word">Today, on this special day of love, I want to ask you something very important...</p>
+    <!-- Main Content -->
+    <div class="scroll-container">
+        <div class="container" id="mainContent">
+            <h1 class="break-word">Happy Valentine's Day, <span class="name-highlight">Eunice</span>! 💝</h1>
+            <p class="subtitle break-word">You make every day brighter, and today I have a special question for you...</p>
+            
+            <div class="personal-note">
+                <p class="break-word">Dear Eunice,</p>
+                <p class="break-word">From the moment I met you, you've brought so much joy and light into my life. Your smile brightens my day, your laughter is music to my ears, and your presence makes everything better.</p>
+                <p class="break-word">Today, on this special day of love, I want to ask you something very important...</p>
+                <p class="break-word">Every time I see you, my heart skips a beat. Your kindness, your intelligence, your beauty - everything about you makes me fall for you more each day.</p>
+                <p class="break-word">I cherish every moment we spend together, from our long talks to our comfortable silences. You understand me in ways no one else does.</p>
+                <p class="break-word">You've become my best friend, my confidante, and the person I want to share everything with. I can't imagine my life without you in it.</p>
+                <p class="break-word">That's why this Valentine's Day feels extra special. It's not just another day - it's a chance to tell you how much you truly mean to me.</p>
+                <p class="break-word">So with all my heart, I want to ask you...</p>
+            </div>
+            
+            <div class="question break-word">Eunice, will you be my Valentine? 💌</div>
+            
+            <div class="buttons-container">
+                <button class="button yes-button" id="yesButton">YES! 💕</button>
+                <button class="button no-button" id="noButton">No ❤️</button>
+            </div>
+            
+            <div class="message break-word" id="message"></div>
+            
+            <div class="result" id="result">
+                <h2 class="break-word">You've Made Me So Happy! 🥰</h2>
+                <div class="result-image">💖🎉💕</div>
+                <p class="break-word">Thank you for saying YES, Eunice! ❤️</p>
+                <p class="break-word">I'm so excited to be your Valentine! Let's make this day unforgettable!</p>
+                <p class="break-word">You mean the world to me! 💝</p>
+                <p class="break-word" style="margin-top: 20px; font-style: italic;">Scroll up to read our special moments again! ⬆️</p>
+            </div>
+            
+            <div class="footer break-word">
+                Made with <i class="fas fa-heart" style="color:#ff477e;"></i> especially for Eunice
+            </div>
         </div>
-        
-        <div class="question break-word">Eunice, will you be my Valentine? 💌</div>
-        
-        <div class="buttons-container">
-            <button class="button yes-button" id="yesButton">YES! 💕</button>
-            <button class="button no-button" id="noButton">No ❤️</button>
-        </div>
-        
-        <div class="message break-word" id="message"></div>
-        
-        <div class="result" id="result">
-            <h2 class="break-word">You've Made Me So Happy! 🥰</h2>
-            <div class="result-image">💖🎉💕</div>
-            <p class="break-word">Thank you for saying YES, Eunice! ❤️</p>
-            <p class="break-word">I'm so excited to be your Valentine! Let's make this day unforgettable!</p>
-            <p class="break-word">You mean the world to me! 💝</p>
-        </div>
-        
-        <div class="footer break-word">
-            Made with <i class="fas fa-heart" style="color:#ff477e;"></i> especially for Eunice
-        </div>
+    </div>
+
+    <!-- Scroll Down Indicator -->
+    <div class="scroll-indicator" id="scrollIndicator">
+        <span>Scroll down</span>
+        <i class="fas fa-chevron-down"></i>
     </div>
 
     <script>
@@ -399,6 +603,9 @@
             const noButton = document.getElementById('noButton');
             const message = document.getElementById('message');
             const result = document.getElementById('result');
+            const scrollTop = document.getElementById('scrollTop');
+            const progressBar = document.getElementById('progressBar');
+            const scrollIndicator = document.getElementById('scrollIndicator');
             
             let noIndex = 0;
             let answered = false;
@@ -427,6 +634,11 @@
                 euniceElements.forEach(el => {
                     el.innerHTML = el.innerHTML.replace(/Eunice/g, '<span class="name-highlight">Eunice</span>');
                 });
+                
+                // Scroll to result section
+                setTimeout(() => {
+                    result.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 500);
             });
             
             // Handle NO button interactions
@@ -514,6 +726,61 @@
                 }
             }
             
+            // Scroll Down Indicator Click
+            scrollIndicator.addEventListener('click', function() {
+                const personalNote = document.querySelector('.personal-note');
+                personalNote.scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'center' 
+                });
+                
+                // Add subtle bounce animation to personal note
+                personalNote.style.transform = 'scale(1.02)';
+                setTimeout(() => {
+                    personalNote.style.transform = 'scale(1)';
+                    personalNote.style.transition = 'transform 0.3s ease';
+                }, 300);
+            });
+            
+            // Scroll to Top Button
+            scrollTop.addEventListener('click', function() {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+            
+            // Update progress bar on scroll
+            window.addEventListener('scroll', function() {
+                const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+                const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                const scrolled = (winScroll / height) * 100;
+                progressBar.style.width = scrolled + "%";
+                
+                // Show/hide scroll to top button
+                if (winScroll > 300) {
+                    scrollTop.classList.add('visible');
+                } else {
+                    scrollTop.classList.remove('visible');
+                }
+                
+                // Hide scroll indicator when scrolled down
+                if (winScroll > 100) {
+                    scrollIndicator.style.opacity = '0';
+                    scrollIndicator.style.pointerEvents = 'none';
+                } else {
+                    scrollIndicator.style.opacity = '1';
+                    scrollIndicator.style.pointerEvents = 'auto';
+                }
+            });
+            
+            // Auto-hide scroll indicator after 5 seconds
+            setTimeout(() => {
+                if (window.scrollY < 100) {
+                    scrollIndicator.style.opacity = '0.7';
+                }
+            }, 5000);
+            
             function createConfetti() {
                 const colors = ['#ff477e', '#ff758f', '#ffafcc', '#ff2e63', '#ff1493'];
                 const confettiCount = window.innerWidth < 768 ? 100 : 150;
@@ -571,7 +838,53 @@
                 document.querySelectorAll('.heart').forEach(heart => {
                     heart.style.animationDuration = `${Math.random() * 4 + 4}s`;
                 });
+                
+                // Make scroll indicator more visible on mobile
+                scrollIndicator.style.fontSize = '1.2rem';
             }
+            
+            // Smooth scroll for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+            
+            // Add keyboard navigation
+            document.addEventListener('keydown', function(e) {
+                // Spacebar or ArrowDown to scroll down
+                if ((e.code === 'Space' || e.code === 'ArrowDown') && !answered) {
+                    e.preventDefault();
+                    const personalNote = document.querySelector('.personal-note');
+                    personalNote.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+                
+                // ArrowUp to scroll to top
+                if (e.code === 'ArrowUp') {
+                    e.preventDefault();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+                
+                // Enter to click yes button
+                if (e.code === 'Enter' && !answered) {
+                    yesButton.click();
+                }
+                
+                // Escape to close/move no button
+                if (e.code === 'Escape' && !answered) {
+                    moveNoButton();
+                }
+            });
         });
     </script>
 </body>
